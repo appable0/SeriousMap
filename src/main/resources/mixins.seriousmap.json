@@ -1,0 +1,9 @@
+{
+  "package": "com.seriousmap.mixin",
+  "refmap": "mixins.seriousmap.refmap.json",
+  "minVersion": "0.7",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "MixinGuiMainMenu"
+  ]
+}

@@ -1,6 +1,9 @@
-import com.examplemod.commands.ExampleCommand
-import com.examplemod.config.Config
-import com.examplemod.config.PersistentData
+import com.seriousmap.commands.SeriousMapCommand
+import com.seriousmap.config.Config
+import com.seriousmap.config.PersistentData
+import com.seriousmap.map.MapScan
+import com.seriousmap.map.TabScan
+import com.seriousmap.utils.LocationUtils
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraftforge.client.ClientCommandHandler
@@ -14,13 +17,12 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import java.io.File
 
 @Mod(
-    modid = "examplemod",
-    name = "ExampleMod",
-    version = "1.0",
-    useMetadata = true,
+    modid = "seriousmap",
+    name = "SeriousMap",
+    version = "0.1",
     clientSideOnly = true
 )
-class ExampleMod {
+class SeriousMap {
 
     @Mod.EventHandler
     fun preInit(event: FMLPreInitializationEvent) {
@@ -29,15 +31,18 @@ class ExampleMod {
         directory.mkdirs()
         configDirectory = directory
         persistentData = PersistentData.load()
-        config = Config
+        config = Config.apply { this.initialize() }
     }
 
     @Mod.EventHandler
     fun onInit(event: FMLInitializationEvent) {
-        ClientCommandHandler.instance.registerCommand(ExampleCommand())
+        ClientCommandHandler.instance.registerCommand(SeriousMapCommand())
 
         listOf(
-            this
+            this,
+            LocationUtils,
+            MapScan,
+            TabScan
         ).forEach(MinecraftForge.EVENT_BUS::register)
     }
 

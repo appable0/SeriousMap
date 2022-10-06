@@ -1,4 +1,4 @@
-package com.examplemod.mixin;
+package com.seriousmap.mixin;
 
 import net.minecraft.client.gui.GuiMainMenu;
 import org.spongepowered.asm.mixin.Mixin;

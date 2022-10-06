@@ -1,7 +1,6 @@
-package com.examplemod.config
+package com.seriousmap.config
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
 import java.io.File
 import kotlinx.serialization.encodeToString
@@ -9,8 +8,9 @@ import kotlinx.serialization.decodeFromString
 
 @Serializable
 data class PersistentData(
-    var exampleData: Map<String, String> = mapOf("key1" to "entry1"),
-    var moreExampleData: Int = 5
+    var mapX: Int = 0,
+    var mapY: Int = 0,
+    var mapScale: Double = 1.0,
 ) {
 
     fun save() {
@@ -18,7 +18,7 @@ data class PersistentData(
     }
 
     companion object {
-        private val configFile: File = File(ExampleMod.configDirectory,"data.json")
+        private val configFile: File = File(SeriousMap.configDirectory,"data.json")
 
         fun load(): PersistentData {
             val data = if (!configFile.exists()) {
@@ -26,7 +26,7 @@ data class PersistentData(
                 PersistentData()
             } else configFile.runCatching {
                 Json.decodeFromString<PersistentData>(this.readText())
-            }.getOrNull() ?: PersistentData()
+            }.getOrDefault(PersistentData())
             return data.apply {
                 this.save()
             }
