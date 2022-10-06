@@ -1,3 +1,5 @@
+package com.seriousmap.data
+
 import com.seriousmap.config.Config
 import com.seriousmap.data.Tile
 import com.seriousmap.data.TileType
@@ -6,12 +8,17 @@ import com.seriousmap.utils.RenderUtils
 import com.seriousmap.utils.Vec2i
 import net.minecraft.client.renderer.GlStateManager
 
-class CornerTile(position: Vec2i) : Tile(position) {
+sealed class CornerTile : Tile() {
+    object Empty : CornerTile()
+    object Corner : CornerTile()
 
-    override fun updateTileData(map: DungeonMap) {
-        val corner = TileType.fromByte(map.getCorner(position))
-        tileType = corner
+    override fun transition(corner: MapColor, center: MapColor, puzzle: String?): CornerTile {
+        return if (TileType.fromColor(corner) == TileType.Room) Corner else Empty
     }
+}
+
+/*
+
 
     override fun draw(angle: Float) {
         tileType?.let {
@@ -27,3 +34,5 @@ class CornerTile(position: Vec2i) : Tile(position) {
         return "CornerTile(type=$tileType)"
     }
 }
+
+ */

@@ -1,33 +1,30 @@
-import SeriousMap.Companion.mc
+package com.seriousmap.data
+
 import com.seriousmap.config.Config
-import com.seriousmap.data.Tile
-import com.seriousmap.data.TileMarker
-import com.seriousmap.data.TileState
-import com.seriousmap.data.TileType
-import com.seriousmap.map.DungeonMap
 import com.seriousmap.utils.RenderUtils
-import com.seriousmap.utils.Vec2i
 import net.minecraft.client.renderer.GlStateManager
 
-class RoomTile(position: Vec2i) : Tile(position) {
-    val state: TileState = TileState()
+sealed class RoomTile : Tile() {
 
-    override fun updateTileData(map: DungeonMap) {
-        val corner = TileType.fromByte(map.getCorner(position))
-        var center = TileMarker.fromByte(map.getCenter(position))
-        if ((corner == TileType.ENTRANCE && center == TileMarker.GREEN)
-            || (corner == TileType.BLOOD && center == TileMarker.FAILED)
-        ) {
-            center = null
-        }
+    object Empty : RoomTile()
+    sealed class Room(val type: TileType, val marker: TileMarker?) : RoomTile()
+    class Normal(type: TileType, marker: TileMarker?) : Room(type, marker)
+    class Puzzle(type: TileType, marker: TileMarker?, val name: String?) : Room(type, marker)
 
-        if (corner == TileType.PUZZLE && tileType != TileType.PUZZLE) {
-            map.addPuzzlePosition(position)
+    override fun transition(corner: MapColor, center: MapColor, puzzle: String?): RoomTile {
+        val tileType = TileType.fromColor(corner) ?: return Empty
+        return if ((this as? Normal)?.type == TileType.Puzzle && puzzle != null) {
+            Puzzle(tileType, marker, puzzle)
+        } else {
+            val markerIsTileColor = (tileType == TileType.Entrance && center == MapColor.Green) || (tileType == TileType.Blood && center == MapColor.Red)
+            val marker = if (markerIsTileColor) null else TileMarker.fromColor(center)
+            Normal(tileType, marker)
         }
-        tileType = corner
-        state.marker = center
     }
+}
 
+
+/*
     override fun draw(angle: Float) {
         tileType?.let {
             val renderPos = getRenderPos()
@@ -41,6 +38,7 @@ class RoomTile(position: Vec2i) : Tile(position) {
     }
 
     override fun toString(): String {
-        return "RoomTile(type=$tileType, marker=${state.marker}, name=${state.name})"
+        return "com.seriousmap.data.RoomTile(type=$tileType, marker=${state.marker}, name=${state.name})"
     }
-}
+
+ */

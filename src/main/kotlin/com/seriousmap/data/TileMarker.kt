@@ -10,11 +10,11 @@ enum class TileMarker(val resourceLocation: ResourceLocation, val color: Color) 
     GREEN(ResourceLocation("seriousmap", "green_check.png"), Color.GREEN);
 
     companion object {
-        fun fromByte(byte: Byte?): TileMarker? = when (byte) {
-            30.toByte() -> GREEN
-            34.toByte() -> WHITE
-            18.toByte() -> FAILED
-            119.toByte() -> UNDISCOVERED
+        fun fromColor(color: MapColor?): TileMarker? = when (color) {
+            MapColor.Green -> GREEN
+            MapColor.White -> WHITE
+            MapColor.Red -> FAILED
+            MapColor.Black -> UNDISCOVERED
             else -> null
         }
     }

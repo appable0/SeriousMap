@@ -21,6 +21,7 @@ object TabScan {
     private val puzzleRegex = Regex("^ ([\\w ]+): \\[[✦|✔|✖].+")
     private var ticks = 0
 
+    /*
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
         if (LocationUtils.dungeonFloor == null || event.phase != TickEvent.Phase.START) return
@@ -31,6 +32,8 @@ object TabScan {
         }
         ticks++
     }
+
+     */
 
     private fun getPlayers(tab: List<NetworkPlayerInfo>): List<PlayerTabData> {
         var counter = 0

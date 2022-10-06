@@ -1,31 +1,21 @@
-import com.seriousmap.config.Config
-import com.seriousmap.data.Tile
-import com.seriousmap.data.TileType
-import com.seriousmap.map.DungeonMap
-import com.seriousmap.utils.RenderUtils
-import com.seriousmap.utils.Vec2i
-import com.seriousmap.utils.scale
-import net.minecraft.client.renderer.GlStateManager
-import scala.tools.nsc.PhaseAssembly.DependencyGraph.Edge
+package com.seriousmap.data
 
-class EdgeTile(position: Vec2i, private val orientation: Orientation) : Tile(position) {
-    var edgeType: EdgeType? = null
+sealed class EdgeTile(val orientation: Orientation) : Tile() {
+    class Empty(orientation: Orientation) : EdgeTile(orientation)
+    class Door(val type: TileType, orientation: Orientation) : EdgeTile(orientation)
+    class Separator(val type: TileType, orientation: Orientation) : EdgeTile(orientation)
 
-    override fun updateTileData(map: DungeonMap) {
-        val corner = TileType.fromByte(map.getCorner(position))
-        val center = TileType.fromByte(map.getCenter(position))
-
-        if (corner == TileType.ROOM) {
-            tileType = corner
-            edgeType = EdgeType.SEPARATOR
-        } else if (center != null) {
-            tileType = center
-            edgeType = EdgeType.DOOR
-        } else {
-            tileType = null
-            edgeType = null
+    override fun transition(corner: MapColor, center: MapColor, puzzle: String?): EdgeTile {
+        val tileCorner = TileType.fromColor(corner)
+        val tileCenter = TileType.fromColor(center)
+        return when {
+            tileCorner == TileType.Room -> Separator(TileType.Room, orientation)
+            tileCenter != null -> Door((this as? Door)?.type ?: tileCenter, orientation)
+            else -> Empty(orientation)
         }
     }
+}
+/*
 
     override fun draw(angle: Float) {
         tileType?.let {
@@ -36,14 +26,14 @@ class EdgeTile(position: Vec2i, private val orientation: Orientation) : Tile(pos
 
             val width = when {
                 orientation == Orientation.VERTICAL -> smallSize
-                edgeType == EdgeType.DOOR  -> Config.doorWidth
+                edgeType == EdgeType.DOOR -> Config.doorWidth
                 edgeType == EdgeType.SEPARATOR -> bigSize
                 else -> null
             }!!.toDouble()
 
             val height = when {
                 orientation == Orientation.HORIZONTAL -> smallSize
-                edgeType == EdgeType.DOOR  -> Config.doorWidth
+                edgeType == EdgeType.DOOR -> Config.doorWidth
                 edgeType == EdgeType.SEPARATOR -> bigSize
                 else -> null
             }!!.toDouble()
@@ -52,15 +42,15 @@ class EdgeTile(position: Vec2i, private val orientation: Orientation) : Tile(pos
                 TileType.toColor(it).scale(Config.doorDarken)
             } else TileType.toColor(it)
 
-            RenderUtils.renderRect(-width / 2 ,-height / 2, width, height, color)
+            RenderUtils.renderRect(-width / 2, -height / 2, width, height, color)
             GlStateManager.translate(-renderPos.x.toDouble(), -renderPos.y.toDouble(), 0.0)
         }
     }
 
+
+
     override fun toString(): String {
         return "EdgeTile(type=$tileType, orientation=${orientation}, edgeType=${edgeType})"
     }
+    */
 
-    enum class EdgeType { DOOR, SEPARATOR }
-    enum class Orientation { HORIZONTAL, VERTICAL }
-}

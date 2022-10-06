@@ -16,3 +16,4 @@ sealed class PlayerStatus {
         }
     }
 }
+

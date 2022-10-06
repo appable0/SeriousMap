@@ -6,7 +6,7 @@ import com.seriousmap.utils.RenderUtils
 import net.minecraft.client.renderer.GlStateManager
 import java.awt.Color
 
-class TileState() {
+class TileState {
     var marker: TileMarker? = null
     var name: String? = null
         set(value) {

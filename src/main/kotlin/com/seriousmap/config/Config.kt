@@ -29,6 +29,8 @@ object Config : Vigilant(
     var colorPuzzle = Color(117, 0, 133)
     var colorBlood = Color(255, 0, 0)
     var colorWither = Color(0, 0, 0)
+    var colorOpened = Color(128, 128, 128)
+
 
     init {
         category("Hidden") {
@@ -93,6 +95,8 @@ object Config : Vigilant(
             color(::colorPuzzle, name = "Puzzle room color")
             color(::colorBlood, name = "Blood room color")
             color(::colorWither, name = "Wither door color")
+            color(::colorOpened, name = "Opened wither door color")
+
         }
 
     }

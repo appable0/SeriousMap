@@ -1,9 +1,8 @@
 package com.seriousmap.map
 
-import RoomTile
 import SeriousMap.Companion.mc
 import com.seriousmap.config.Config
-import com.seriousmap.data.Tile
+import com.seriousmap.data.*
 import com.seriousmap.player.DungeonPlayer
 import com.seriousmap.utils.RenderUtils
 import com.seriousmap.utils.Vec2i
@@ -15,20 +14,26 @@ import java.awt.Color
 import kotlin.math.max
 import kotlin.math.roundToInt
 
-class DungeonMap(mapData: MapData) {
-    private val mapScale: MapScale = MapScale.fromMapData(mapData)
+class DungeonMap(private val mapScale: MapScale, private val mapData: MapData) {
+    /*
     private val puzzlePositions = mutableListOf<Vec2i>()
     private val assignedPuzzleNames = mutableSetOf<String>()
     private val unassignedPuzzleNames = mutableSetOf<String>()
-    private val tiles = mutableListOf<Tile>()
     private val players = mutableMapOf<String, DungeonPlayer>()
+    */
 
-    var mapData: MapData = mapData
-        set(newData) {
-            field = newData
-            updateTiles()
-            updatePuzzles()
-        }
+    fun getNewMap(newData: MapData): DungeonMap = DungeonMap(mapScale, newData)
+
+    private val tiles = List(mapScale.tileCount) { index ->
+        val vec = mapScale.indexToTilePosition(index)
+        when (vec % 2) {
+            Vec2i(0, 0) -> RoomTile.Empty
+            Vec2i(1, 0) -> EdgeTile.Empty(Orientation.Vertical)
+            Vec2i(0, 1) -> EdgeTile.Empty(Orientation.Horizontal)
+            Vec2i(1, 1) -> CornerTile.Empty
+            else -> null
+        }!!
+    }
 
     private val renderWidth: Int
         get() = mapScale.roomCount.x * 20 - 4
@@ -36,19 +41,19 @@ class DungeonMap(mapData: MapData) {
     private val renderHeight: Int
         get() = mapScale.roomCount.y * 20 - 4
 
-    init {
-        for (y in 0 until mapScale.roomCount.y * 2) {
-            for (x in 0 until mapScale.roomCount.x * 2) {
-                val pos = Vec2i(x, y)
-                tiles.add(Tile.makeTile(Vec2i(x, y)))
-            }
-        }
-    }
-
     override fun toString(): String {
         return tiles.joinToString(", ")
     }
 
+    private fun getColor(mapPosition: Vec2i): MapColor? =
+        MapColor.fromByte(mapData.colors.getOrNull(mapPosition.x + mapPosition.y * MapScale.MAP_SIZE))
+
+    fun getCorner(tilePosition: Vec2i): MapColor? = getColor(mapScale.getTileCorner(tilePosition))
+    fun getCenter(tilePosition: Vec2i): MapColor? = getColor(mapScale.getTileCenter(tilePosition))
+
+
+
+    /*
     fun renderMap() {
         val angle = 180 - mc.thePlayer.rotationYaw
         val scale = ScaledResolution(mc).scaleFactor
@@ -79,8 +84,10 @@ class DungeonMap(mapData: MapData) {
         GlStateManager.popMatrix()
     }
 
-    private fun getColor(mapPosition: Vec2i): Byte? =
-        mapData.colors.getOrNull(mapPosition.x + mapPosition.y * MapScale.MAP_SIZE)
+     */
+
+    /*
+
 
     private fun updateTiles() {
         tiles.forEach { it.updateTileData(this) }
@@ -111,8 +118,6 @@ class DungeonMap(mapData: MapData) {
         }
     }
 
-    fun getCorner(tilePosition: Vec2i): Byte? = getColor(mapScale.getTileCorner(tilePosition))
-    fun getCenter(tilePosition: Vec2i): Byte? = getColor(mapScale.getTileCenter(tilePosition))
 
     fun addPlayerData(data: List<TabScan.PlayerTabData>) {
         data.forEach {
@@ -121,4 +126,6 @@ class DungeonMap(mapData: MapData) {
             println(dungeonPlayer)
         }
     }
+
+     */
 }
