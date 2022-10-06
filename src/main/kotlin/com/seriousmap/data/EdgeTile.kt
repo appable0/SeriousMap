@@ -5,13 +5,26 @@ sealed class EdgeTile(val orientation: Orientation) : Tile() {
     class Door(val type: TileType, orientation: Orientation) : EdgeTile(orientation)
     class Separator(val type: TileType, orientation: Orientation) : EdgeTile(orientation)
 
-    override fun transition(corner: MapColor, center: MapColor, puzzle: String?): EdgeTile {
+    override fun transition(corner: MapColor?, center: MapColor?, puzzle: String?): EdgeTile {
         val tileCorner = TileType.fromColor(corner)
         val tileCenter = TileType.fromColor(center)
         return when {
             tileCorner == TileType.Room -> Separator(TileType.Room, orientation)
-            tileCenter != null -> Door((this as? Door)?.type ?: tileCenter, orientation)
+            tileCenter != null -> {
+                val isOpenedWitherDoor = (this as? Door)?.type?.let {
+                    ((it != tileCenter && it == TileType.Wither) || it == TileType.Opened)
+                } == true
+                if (isOpenedWitherDoor) Door(TileType.Opened, orientation) else Door(tileCenter, orientation)
+            }
             else -> Empty(orientation)
+        }
+    }
+
+    override fun toString(): String {
+        return when (this) {
+            is Empty -> "EdgeTile.Empty($orientation)"
+            is Door -> "EdgeTile.Door($type, $orientation)"
+            is Separator -> "EdgeTile.Separator($type, $orientation)"
         }
     }
 }

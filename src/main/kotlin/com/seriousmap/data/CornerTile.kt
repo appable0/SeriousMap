@@ -12,8 +12,15 @@ sealed class CornerTile : Tile() {
     object Empty : CornerTile()
     object Corner : CornerTile()
 
-    override fun transition(corner: MapColor, center: MapColor, puzzle: String?): CornerTile {
+    override fun transition(corner: MapColor?, center: MapColor?, puzzle: String?): CornerTile {
         return if (TileType.fromColor(corner) == TileType.Room) Corner else Empty
+    }
+
+    override fun toString(): String {
+        return when (this) {
+            is Empty -> "CornerTile.Empty"
+            is Corner -> "CornerTile.Corner"
+        }
     }
 }
 

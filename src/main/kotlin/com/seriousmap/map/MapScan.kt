@@ -35,13 +35,15 @@ object MapScan {
 
     @SubscribeEvent
     fun onTick(event: TickEvent.ClientTickEvent) {
-        if (event.phase != TickEvent.Phase.START) return
-        if (LocationUtils.dungeonFloor == null) return
+        if (LocationUtils.dungeonFloor == null || event.phase != TickEvent.Phase.START) return
         if (ticks % 4 == 0) {
             val mapData = getMapData() ?: return
-            dungeonMap = dungeonMap?.getNewMap(mapData) ?: MapScale.fromMap(mapData)?.let {
-                DungeonMap(it, mapData)
+            dungeonMap = dungeonMap?.transition(mapData) ?: MapScale.fromMap(mapData)?.let {
+                DungeonMap(it)
             }
+        }
+        if (ticks % 40 == 0) {
+            println(dungeonMap)
         }
         ticks++
     }

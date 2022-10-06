@@ -14,7 +14,7 @@ import java.awt.Color
 import kotlin.math.max
 import kotlin.math.roundToInt
 
-class DungeonMap(private val mapScale: MapScale, private val mapData: MapData) {
+class DungeonMap(private val mapScale: MapScale, tiles: List<Tile>? = null) {
     /*
     private val puzzlePositions = mutableListOf<Vec2i>()
     private val assignedPuzzleNames = mutableSetOf<String>()
@@ -22,9 +22,7 @@ class DungeonMap(private val mapScale: MapScale, private val mapData: MapData) {
     private val players = mutableMapOf<String, DungeonPlayer>()
     */
 
-    fun getNewMap(newData: MapData): DungeonMap = DungeonMap(mapScale, newData)
-
-    private val tiles = List(mapScale.tileCount) { index ->
+    private val tiles: List<Tile> = tiles ?: List(mapScale.tileCount) { index ->
         val vec = mapScale.indexToTilePosition(index)
         when (vec % 2) {
             Vec2i(0, 0) -> RoomTile.Empty
@@ -33,6 +31,13 @@ class DungeonMap(private val mapScale: MapScale, private val mapData: MapData) {
             Vec2i(1, 1) -> CornerTile.Empty
             else -> null
         }!!
+    }
+
+    fun transition(newData: MapData): DungeonMap {
+        return DungeonMap(mapScale, tiles.mapIndexed { index, tile ->
+            val position = mapScale.indexToTilePosition(index)
+            tile.transition(getCorner(newData, position), getCenter(newData, position), null)
+        })
     }
 
     private val renderWidth: Int
@@ -45,12 +50,14 @@ class DungeonMap(private val mapScale: MapScale, private val mapData: MapData) {
         return tiles.joinToString(", ")
     }
 
-    private fun getColor(mapPosition: Vec2i): MapColor? =
+    fun getColor(mapData: MapData, mapPosition: Vec2i): MapColor? =
         MapColor.fromByte(mapData.colors.getOrNull(mapPosition.x + mapPosition.y * MapScale.MAP_SIZE))
 
-    fun getCorner(tilePosition: Vec2i): MapColor? = getColor(mapScale.getTileCorner(tilePosition))
-    fun getCenter(tilePosition: Vec2i): MapColor? = getColor(mapScale.getTileCenter(tilePosition))
+    fun getCorner(mapData: MapData, tilePosition: Vec2i): MapColor? =
+        getColor(mapData, mapScale.getTileCorner(tilePosition))
 
+    fun getCenter(mapData: MapData, tilePosition: Vec2i): MapColor? =
+        getColor(mapData, mapScale.getTileCenter(tilePosition))
 
 
     /*
