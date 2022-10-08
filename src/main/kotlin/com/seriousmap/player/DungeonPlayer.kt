@@ -23,8 +23,8 @@ data class DungeonPlayer(val name: String) {
         return "DungeonPlayer($name, icon-$mapIndex, $dungeonClass, map: $positionMap, render: $positionRender)"
     }
 
-
     fun draw() {
+        if (isDead) return
         val position = positionRender ?: (positionMap ?: return)
         GlStateManager.pushMatrix()
         GlStateManager.translate(position.x, position.y, 20.0)
