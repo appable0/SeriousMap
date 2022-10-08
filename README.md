@@ -1,9 +1,20 @@
-# Kotlin and Essential template for 1.8.9 client-side forge mods
+# SeriousMap
 
-A small template mostly designed for my own learning and potentially future projects. Based on @romangraef's Forge 1.8.9 template.
+A work-in-progress legal map for dungeons in Hypixel Skyblock with puzzle detection. Supports Forge 1.8.9; requires (and installs) Essential.
 
-Note that I am new to Java and Kotlin, and MC modding in general: there very well could be questionable design choices or serious issues. (if you happen to notice any, I'd appreciate a note!) 
+### Current features
+* Map rendering
+* Puzzle detection via tab menu
+* Player rendering via world and map information
 
-Includes an example Vigilance configuration for main settings and PersistentData data class to allow easily de/serializing additional data.
 
-This template is licensed under the Unlicense (license copy present in this repository), or alternatively under [Creative Commons 1.0 Universal (CC0 1.0)](https://creativecommons.org/publicdomain/zero/1.0/).  This means your mod, based on this template can be licensed whatever way you want, and does not need to reference back to this template in any way.
+### To Do
+* Usable move-map GUI
+* Optional crypt and secret counters 
+* Opened wither door notifications
+* Better handling at end-of-dungeon/end-of-clear
+
+### Credits
+* [UnclaimedBloom6/IllegalMap](https://github.com/UnclaimedBloom6/IllegalMap): player updating; puzzle detection
+* [Harry282/FunnyMap](https://github.com/Harry282/FunnyMap): map data representation, virtually all rendering code, and more
+* [Skytils/SkytilsMod](https://github.com/Skytils/SkytilsMod): tab list utilities
