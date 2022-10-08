@@ -2,6 +2,8 @@
 
 A work-in-progress legal map for dungeons in Hypixel Skyblock with puzzle detection. Supports Forge 1.8.9; requires (and installs) Essential.
 
+<img width="250" alt="Screen Shot 2022-10-08 at 2 00 12 PM" src="https://user-images.githubusercontent.com/16139460/194727649-abc1d4b4-c653-46e2-babb-42599ca85883.png">
+
 ### Current features
 * Map rendering
 * Puzzle detection via tab menu
@@ -10,7 +12,8 @@ A work-in-progress legal map for dungeons in Hypixel Skyblock with puzzle detect
 
 ### To Do
 * Usable move-map GUI
-* Optional crypt and secret counters 
+* Optional crypt and secret counters
+
 * Opened wither door notifications
 * Better handling at end-of-dungeon/end-of-clear
 
