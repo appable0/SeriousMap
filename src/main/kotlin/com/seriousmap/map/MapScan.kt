@@ -27,6 +27,10 @@ object MapScan {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     fun onOverlay(event: RenderGameOverlayEvent.Pre) {
         if (event.type != RenderGameOverlayEvent.ElementType.ALL) return
+        dungeonMap?.apply {
+            updatePlayersFromWorld()
+            renderMap()
+        }
         dungeonMap?.renderMap()
     }
 
@@ -42,9 +46,10 @@ object MapScan {
         if (ticks % 4 == 0) {
             val mapData = getMapData() ?: return
             dungeonMap?.apply {
-                this.mapData = mapData
+                update(mapData)
             } ?: run {
-                dungeonMap = DungeonMap(mapData)
+                val mapScale = MapScale.fromMapData(mapData) ?: return
+                dungeonMap = DungeonMap(mapScale, mapData)
             }
         }
         ticks++

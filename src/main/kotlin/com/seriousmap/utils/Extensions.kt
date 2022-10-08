@@ -1,6 +1,7 @@
 package com.seriousmap.utils
 
 import gg.essential.universal.ChatColor.Companion.stripControlCodes
+import net.minecraft.util.Vec4b
 import java.awt.Color
 import kotlin.math.roundToInt
 
@@ -26,4 +27,21 @@ fun Color.scale(amount: Float): Color {
         (this.blue * amount).roundToInt().coerceIn(0, 255),
         this.alpha
     )
+}
+
+// from Harry282/FunnyMap
+val Vec4b.mapX
+    inline get() = (this.func_176112_b() + 128) / 2
+
+val Vec4b.mapY
+    inline get() = (this.func_176113_c() + 128) / 2
+
+val Vec4b.yaw
+    inline get() = this.func_176111_d() * 22.5f
+
+fun Int.mapToRange(original: IntRange, target: IntRange): Double = this.toDouble().mapToRange(original, target)
+
+fun Double.mapToRange(original: IntRange, target: IntRange): Double {
+    val ratio = (this - original.first) / (original.last - original.first)
+    return ratio * (target.last - target.first)
 }

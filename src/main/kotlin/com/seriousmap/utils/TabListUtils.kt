@@ -31,7 +31,7 @@ object TabListUtils {
             return -1
         }
     }
-    var tabEntries: List<Pair<NetworkPlayerInfo, String>> = emptyList()
+
     fun fetchTabEntries(): List<NetworkPlayerInfo> =
         if (mc.thePlayer == null) emptyList() else playerInfoOrdering.sortedCopy(
             mc.thePlayer.sendQueue.playerInfoMap

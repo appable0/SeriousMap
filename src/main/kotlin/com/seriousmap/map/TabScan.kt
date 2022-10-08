@@ -21,24 +21,13 @@ object TabScan {
     private val puzzleRegex = Regex("^ ([\\w ]+): \\[[✦|✔|✖].+")
     private var ticks = 0
 
-    @SubscribeEvent
-    fun onTick(event: TickEvent.ClientTickEvent) {
-        if (LocationUtils.dungeonFloor == null || event.phase != TickEvent.Phase.START) return
-        if (ticks % 10 == 0) {
-            val tab = TabListUtils.fetchTabEntries()
-            MapScan.dungeonMap?.addPuzzleNames(getPuzzleNames(tab))
-            MapScan.dungeonMap?.addPlayerData(getPlayers(tab))
-        }
-        ticks++
-    }
-
-    private fun getPlayers(tab: List<NetworkPlayerInfo>): List<PlayerTabData> {
+    fun getPlayers(tab: List<NetworkPlayerInfo>): List<PlayerTabData> {
         var counter = 0
-        val players = tab.filter { networkPlayerInfo ->
+        var players = tab.filter { networkPlayerInfo ->
             playerRegex.matches(stripControlCodes(networkPlayerInfo.text))
-        }.toMutableList()
-        Collections.rotate(players, 1)
-        return tab.mapNotNull { networkPlayerInfo ->
+        }
+        Collections.rotate(players, -1)
+        return players.mapNotNull { networkPlayerInfo ->
             val matchResult = playerRegex.find(stripControlCodes(networkPlayerInfo.text))
             matchResult?.let { result ->
                 val name = result.groups["name"]!!.value
@@ -56,7 +45,7 @@ object TabScan {
         }
     }
 
-    private fun getPuzzleNames(tab: List<NetworkPlayerInfo>): Set<String> {
+    fun getPuzzleNames(tab: List<NetworkPlayerInfo>): Set<String> {
         return tab.mapNotNull {
             val matchResult = puzzleRegex.find(stripControlCodes(it.text))
             matchResult?.let { result ->

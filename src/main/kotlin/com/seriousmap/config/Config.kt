@@ -16,7 +16,6 @@ object Config : Vigilant(
     var mapScale = 1.0F
 
     var doorWidth = 4
-    var doorThickness = 4
     var checkScale = 0.8F
     var doorDarken = 0.8F
 
@@ -62,12 +61,6 @@ object Config : Vigilant(
             slider(
                 ::doorWidth,
                 name = "Door width",
-                min = 2,
-                max = 8
-            )
-            slider(
-                ::doorThickness,
-                name = "Door thickness",
                 min = 2,
                 max = 8
             )

@@ -6,7 +6,6 @@ import com.seriousmap.utils.RenderUtils
 import com.seriousmap.utils.Vec2i
 import com.seriousmap.utils.scale
 import net.minecraft.client.renderer.GlStateManager
-import scala.tools.nsc.PhaseAssembly.DependencyGraph.Edge
 
 class EdgeTile(position: Vec2i, private val orientation: Orientation) : Tile(position) {
     var edgeType: EdgeType? = null
@@ -14,7 +13,7 @@ class EdgeTile(position: Vec2i, private val orientation: Orientation) : Tile(pos
     override fun updateTileData(map: DungeonMap) {
         val corner = TileType.fromByte(map.getCorner(position))
         val center = TileType.fromByte(map.getCenter(position))
-
+        
         if (corner == TileType.ROOM) {
             tileType = corner
             edgeType = EdgeType.SEPARATOR
@@ -31,20 +30,18 @@ class EdgeTile(position: Vec2i, private val orientation: Orientation) : Tile(pos
         tileType?.let {
             val renderPos = getRenderPos()
             GlStateManager.translate(renderPos.x.toDouble(), renderPos.y.toDouble(), 0.0)
-            val smallSize = Config.doorThickness
-            val bigSize = 20.0 - Config.doorThickness
 
             val width = when {
-                orientation == Orientation.VERTICAL -> smallSize
+                orientation == Orientation.VERTICAL -> 4
                 edgeType == EdgeType.DOOR  -> Config.doorWidth
-                edgeType == EdgeType.SEPARATOR -> bigSize
+                edgeType == EdgeType.SEPARATOR -> 16
                 else -> null
             }!!.toDouble()
 
             val height = when {
-                orientation == Orientation.HORIZONTAL -> smallSize
+                orientation == Orientation.HORIZONTAL -> 4
                 edgeType == EdgeType.DOOR  -> Config.doorWidth
-                edgeType == EdgeType.SEPARATOR -> bigSize
+                edgeType == EdgeType.SEPARATOR -> 16
                 else -> null
             }!!.toDouble()
 

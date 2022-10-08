@@ -17,8 +17,7 @@ class CornerTile(position: Vec2i) : Tile(position) {
         tileType?.let {
             val renderPos = getRenderPos()
             GlStateManager.translate(renderPos.x.toDouble(), renderPos.y.toDouble(), 0.0)
-            val cornerSize = Config.doorThickness.toDouble()
-            RenderUtils.renderRect( -cornerSize / 2,-cornerSize / 2,cornerSize, cornerSize, TileType.toColor(it))
+            RenderUtils.renderRect( -2.0,-2.0, 4.0, 4.0, TileType.toColor(it))
             GlStateManager.translate(-renderPos.x.toDouble(), -renderPos.y.toDouble(), 0.0)
         }
     }

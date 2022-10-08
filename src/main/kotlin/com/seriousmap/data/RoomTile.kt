@@ -31,10 +31,9 @@ class RoomTile(position: Vec2i) : Tile(position) {
     override fun draw(angle: Float) {
         tileType?.let {
             val renderPos = getRenderPos()
-            val roomSize = (20 - Config.doorThickness).toDouble()
             GlStateManager.translate(renderPos.x.toDouble(), renderPos.y.toDouble(), 0.0)
-            RenderUtils.renderRect(-roomSize / 2, -roomSize / 2, roomSize, roomSize, TileType.toColor(it))
-            state.draw(angle, roomSize)
+            RenderUtils.renderRect(-8.0, -8.0, 16.0, 16.0, TileType.toColor(it))
+            state.draw(angle)
             GlStateManager.translate(-renderPos.x.toDouble(), -renderPos.y.toDouble(), 0.0)
 
         }

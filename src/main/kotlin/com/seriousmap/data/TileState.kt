@@ -16,13 +16,13 @@ class TileState() {
             }
         }
 
-    fun draw(angle: Float, roomSize: Double) {
+    fun draw(angle: Float) {
         GlStateManager.rotate(-angle, 0F, 0F, 1F)
         GlStateManager.translate(0F, 0F, 1F)
 
         if (name == null) {
             marker?.resourceLocation?.let { resourceLocation ->
-                val textureSize = (roomSize * Config.checkScale / 2).toInt()
+                val textureSize = (16 * Config.checkScale / 2).toInt()
                 GlStateManager.enableAlpha()
                 GlStateManager.color(255f, 255f, 255f, 255f)
                 mc.textureManager.bindTexture(resourceLocation)
