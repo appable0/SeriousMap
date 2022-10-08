@@ -17,6 +17,7 @@ data class DungeonPlayer(val name: String) {
     var isDead: Boolean = false
     var positionRender: PlayerPosition? = null
     var positionMap: PlayerPosition? = null
+    var wearingHat = false
 
     override fun toString(): String {
         return "DungeonPlayer($name, icon-$mapIndex, $dungeonClass, map: $positionMap, render: $positionRender)"
@@ -33,7 +34,9 @@ data class DungeonPlayer(val name: String) {
         GlStateManager.color(255.0F, 255.0F, 255.0F, 255.0F)
         mc.textureManager.bindTexture(skin)
         Gui.drawScaledCustomSizeModalRect(-4, -4, 8f, 8f, 8, 8, 8, 8, 64f, 64f)
-        Gui.drawScaledCustomSizeModalRect(-4, -4, 40f, 8f, 8, 8, 8, 8, 64f, 64f)
+        if (wearingHat) {
+            Gui.drawScaledCustomSizeModalRect(-4, -4, 40f, 8f, 8, 8, 8, 8, 64f, 64f)
+        }
         GlStateManager.disableAlpha()
         GlStateManager.popMatrix()
     }

@@ -9,6 +9,7 @@ import com.seriousmap.utils.*
 import gg.essential.universal.UChat
 import net.minecraft.client.gui.ScaledResolution
 import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.entity.player.EnumPlayerModelParts
 import net.minecraft.world.storage.MapData
 import org.lwjgl.opengl.GL11
 import org.lwjgl.opengl.GL14
@@ -142,6 +143,7 @@ class DungeonMap(private val mapScale: MapScale, var mapData: MapData) {
             val renderX = it.posX.mapToRange(-200..endCorner.x, 0..mapScale.renderedMapSize.x)
             val renderY = it.posZ.mapToRange(-200..endCorner.y, 0..mapScale.renderedMapSize.y)
             player.positionRender = DungeonPlayer.PlayerPosition(renderX, renderY, it.rotationYaw)
+            player.wearingHat = it.isWearing(EnumPlayerModelParts.HAT) == true
         }
     }
 }
