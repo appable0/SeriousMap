@@ -34,8 +34,6 @@ class RoomTile(position: Vec2i) : Tile(position) {
             GlStateManager.translate(renderPos.x.toDouble(), renderPos.y.toDouble(), 0.0)
             RenderUtils.renderRect(-8.0, -8.0, 16.0, 16.0, TileType.toColor(it))
             state.draw(angle)
-            GlStateManager.translate(-renderPos.x.toDouble(), -renderPos.y.toDouble(), 0.0)
-
         }
     }
 

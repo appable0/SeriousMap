@@ -46,7 +46,19 @@ object RenderUtils {
         tessellator.draw()
     }
 
-    fun renderCenteredText(str: String?, color: Color) {
+    fun renderCenteredTextWithBackground(str: String?, x: Int, y: Int) {
+        val width = mc.fontRendererObj.getStringWidth(str)
+        renderRect(x - width / 2.0 - 2, y - 1.0, width + 4.0, 10.0, Color(0, 0, 0, 150))
+        mc.fontRendererObj.drawString(
+            str,
+            x - width / 2.0F,
+            y.toFloat(),
+            Color.WHITE.hashCode(),
+            true
+        )
+    }
+
+    fun renderCenteredMultiLineText(str: String?, color: Color) {
         if (str == null) return
         val text = str.split(" ")
         if (text.isNotEmpty()) {

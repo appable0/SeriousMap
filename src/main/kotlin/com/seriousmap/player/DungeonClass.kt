@@ -1,9 +1,9 @@
 package com.seriousmap.player
 
-enum class DungeonClass {
-    HEALER,
-    TANK,
-    BERSERK,
-    ARCHER,
-    MAGE
+enum class DungeonClass(val shortName: String) {
+    HEALER("H"),
+    TANK("T"),
+    BERSERK("B"),
+    ARCHER("A"),
+    MAGE("M");
 }

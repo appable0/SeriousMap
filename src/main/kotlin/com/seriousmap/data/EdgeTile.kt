@@ -5,6 +5,7 @@ import com.seriousmap.map.DungeonMap
 import com.seriousmap.utils.RenderUtils
 import com.seriousmap.utils.Vec2i
 import com.seriousmap.utils.scale
+import gg.essential.universal.UChat
 import net.minecraft.client.renderer.GlStateManager
 
 class EdgeTile(position: Vec2i, private val orientation: Orientation) : Tile(position) {
@@ -13,12 +14,15 @@ class EdgeTile(position: Vec2i, private val orientation: Orientation) : Tile(pos
     override fun updateTileData(map: DungeonMap) {
         val corner = TileType.fromByte(map.getCorner(position))
         val center = TileType.fromByte(map.getCenter(position))
-        
         if (corner == TileType.ROOM) {
             tileType = corner
             edgeType = EdgeType.SEPARATOR
         } else if (center != null) {
-            tileType = center
+            tileType = if (tileType == TileType.OPENED || (tileType == TileType.WITHER && center == TileType.ROOM)) {
+                TileType.OPENED
+            } else {
+                center
+            }
             edgeType = EdgeType.DOOR
         } else {
             tileType = null
@@ -33,14 +37,14 @@ class EdgeTile(position: Vec2i, private val orientation: Orientation) : Tile(pos
 
             val width = when {
                 orientation == Orientation.VERTICAL -> 4
-                edgeType == EdgeType.DOOR  -> Config.doorWidth
+                edgeType == EdgeType.DOOR -> Config.doorWidth
                 edgeType == EdgeType.SEPARATOR -> 16
                 else -> null
             }!!.toDouble()
 
             val height = when {
                 orientation == Orientation.HORIZONTAL -> 4
-                edgeType == EdgeType.DOOR  -> Config.doorWidth
+                edgeType == EdgeType.DOOR -> Config.doorWidth
                 edgeType == EdgeType.SEPARATOR -> 16
                 else -> null
             }!!.toDouble()
@@ -49,14 +53,11 @@ class EdgeTile(position: Vec2i, private val orientation: Orientation) : Tile(pos
                 TileType.toColor(it).scale(Config.doorDarken)
             } else TileType.toColor(it)
 
-            RenderUtils.renderRect(-width / 2 ,-height / 2, width, height, color)
-            GlStateManager.translate(-renderPos.x.toDouble(), -renderPos.y.toDouble(), 0.0)
+            RenderUtils.renderRect(-width / 2, -height / 2, width, height, color)
         }
     }
 
-    override fun toString(): String {
-        return "EdgeTile(type=$tileType, orientation=${orientation}, edgeType=${edgeType})"
-    }
+    override fun toString() = "EdgeTile(type=$tileType, orientation=${orientation}, edgeType=${edgeType})"
 
     enum class EdgeType { DOOR, SEPARATOR }
     enum class Orientation { HORIZONTAL, VERTICAL }

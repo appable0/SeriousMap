@@ -10,6 +10,7 @@ object Config : Vigilant(
     SeriousMap.metadata.name
 ) {
 
+    var mapSpin = true
     var mapX = 0
     var mapY = 0
     var borderScale = 1.0F
@@ -28,6 +29,7 @@ object Config : Vigilant(
     var colorPuzzle = Color(117, 0, 133)
     var colorBlood = Color(255, 0, 0)
     var colorWither = Color(0, 0, 0)
+    var colorOpened = Color(107, 58, 17)
 
     init {
         category("Hidden") {
@@ -51,6 +53,10 @@ object Config : Vigilant(
             )
         }
         category("Visual") {
+            switch(
+                ::mapSpin,
+                name = "Spinny map"
+            )
             decimalSlider(
                 ::mapScale,
                 name = "Map scale",
@@ -86,6 +92,7 @@ object Config : Vigilant(
             color(::colorPuzzle, name = "Puzzle room color")
             color(::colorBlood, name = "Blood room color")
             color(::colorWither, name = "Wither door color")
+            color(::colorOpened, name = "Opened door color")
         }
 
     }

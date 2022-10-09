@@ -1,6 +1,8 @@
 package com.seriousmap.utils
 
 import gg.essential.universal.ChatColor.Companion.stripControlCodes
+import net.minecraft.client.renderer.GlStateManager
+import net.minecraft.item.ItemStack
 import net.minecraft.util.Vec4b
 import java.awt.Color
 import kotlin.math.roundToInt
@@ -45,3 +47,10 @@ fun Double.mapToRange(original: IntRange, target: IntRange): Double {
     val ratio = (this - original.first) / (original.last - original.first)
     return ratio * (target.last - target.first)
 }
+
+val ItemStack.skyblockID: String?
+    get() {
+        if (!this.hasTagCompound()) return null
+        val extraAttributes = this.getSubCompound("ExtraAttributes", false) ?: return null
+        return if (!extraAttributes.hasKey("id", 8)) null else extraAttributes.getString("id")
+    }

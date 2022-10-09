@@ -53,7 +53,9 @@ class DungeonMap(private val mapScale: MapScale, var mapData: MapData) {
     }
 
     fun renderMap() {
-        val angle = 180 - mc.thePlayer.rotationYaw
+        val shouldRenderNames =
+            listOf("SPIRIT_LEAP", "INFINITE_SPIRIT_LEAP", "HAUNT_ABILITY").contains(mc.thePlayer.heldItem?.skyblockID)
+        val angle = if (Config.mapSpin) (180 - mc.thePlayer.rotationYaw) else 0.0F
         val scale = ScaledResolution(mc).scaleFactor
         val borderSize = (150 * Config.borderScale).roundToInt()
         GlStateManager.pushMatrix()
@@ -62,6 +64,7 @@ class DungeonMap(private val mapScale: MapScale, var mapData: MapData) {
         RenderUtils.renderRect(
             0.0, 0.0, borderSize.toDouble(), borderSize.toDouble(), Color(0.0F, 0.0F, 0.0F, 0.5F)
         )
+
         GL11.glEnable(GL11.GL_SCISSOR_TEST)
         GL11.glScissor(
             Config.mapX * scale,
@@ -74,8 +77,16 @@ class DungeonMap(private val mapScale: MapScale, var mapData: MapData) {
         val scaling = borderSize.toDouble() / (20 * 6 - 4) * Config.mapScale
         GlStateManager.scale(scaling, scaling, 1.0)
         GlStateManager.translate(-renderWidth / 2.0, -renderHeight / 2.0, 0.0)
-        tiles.forEach { it.draw(angle) }
-        players.values.forEach { it.draw() }
+        tiles.forEach {
+            GlStateManager.pushMatrix()
+            it.draw(angle)
+            GlStateManager.popMatrix()
+        }
+        players.values.forEach {
+            GlStateManager.pushMatrix()
+            it.draw(angle, shouldRenderNames)
+            GlStateManager.popMatrix()
+        }
         GL11.glDisable(GL11.GL_SCISSOR_TEST)
         GlStateManager.popMatrix()
     }

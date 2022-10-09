@@ -30,11 +30,7 @@ class TileState() {
             }
         } else {
             GlStateManager.scale(0.6, 0.6, 1.0)
-            RenderUtils.renderCenteredText(name, marker?.color ?: Color.WHITE)
-            GlStateManager.scale(1/0.6, 1/0.6, 1.0)
-
+            RenderUtils.renderCenteredMultiLineText(name, marker?.color ?: Color.WHITE)
         }
-        GlStateManager.translate(0F, 0F, -1F)
-        GlStateManager.rotate(angle, 0F, 0F, 1F)
     }
 }

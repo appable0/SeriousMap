@@ -18,7 +18,6 @@ class CornerTile(position: Vec2i) : Tile(position) {
             val renderPos = getRenderPos()
             GlStateManager.translate(renderPos.x.toDouble(), renderPos.y.toDouble(), 0.0)
             RenderUtils.renderRect( -2.0,-2.0, 4.0, 4.0, TileType.toColor(it))
-            GlStateManager.translate(-renderPos.x.toDouble(), -renderPos.y.toDouble(), 0.0)
         }
     }
 

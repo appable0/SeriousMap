@@ -6,8 +6,6 @@ import com.seriousmap.utils.RenderUtils
 import net.minecraft.client.gui.Gui
 import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.util.ResourceLocation
-import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL14
 import java.awt.Color
 
 data class DungeonPlayer(val name: String) {
@@ -23,11 +21,20 @@ data class DungeonPlayer(val name: String) {
         return "DungeonPlayer($name, icon-$mapIndex, $dungeonClass, map: $positionMap, render: $positionRender)"
     }
 
-    fun draw() {
+    private val renderString: String
+        get() = if (dungeonClass == null) "§a$name" else "§e[${dungeonClass!!.shortName}] §a$name"
+
+    fun draw(angle: Float, shouldDrawName: Boolean) {
         if (isDead) return
         val position = positionRender ?: (positionMap ?: return)
-        GlStateManager.pushMatrix()
         GlStateManager.translate(position.x, position.y, 20.0)
+        if (shouldDrawName) {
+            GlStateManager.pushMatrix()
+            GlStateManager.rotate(-angle, 0.0F, 0.0F, 1.0F)
+            GlStateManager.scale(0.6, 0.6, 1.0)
+            RenderUtils.renderCenteredTextWithBackground(renderString, 0, 10)
+            GlStateManager.popMatrix()
+        }
         GlStateManager.rotate(position.yaw + 180, 0.0F, 0.0F, 1.0F)
         RenderUtils.renderRect(-5.0, -5.0, 10.0, 10.0, Color.BLACK)
         GlStateManager.enableAlpha()
@@ -38,7 +45,6 @@ data class DungeonPlayer(val name: String) {
             Gui.drawScaledCustomSizeModalRect(-4, -4, 40f, 8f, 8, 8, 8, 8, 64f, 64f)
         }
         GlStateManager.disableAlpha()
-        GlStateManager.popMatrix()
     }
 
     fun updateFromTab(tabData: TabScan.PlayerTabData) {
@@ -50,6 +56,7 @@ data class DungeonPlayer(val name: String) {
                 isDead = true
             }
             is PlayerStatus.WithIndex -> {
+                isDead = false
                 mapIndex = status.mapIndex
                 if (status is PlayerStatus.WithIndex.Class) {
                     dungeonClass = status.dungeonClass

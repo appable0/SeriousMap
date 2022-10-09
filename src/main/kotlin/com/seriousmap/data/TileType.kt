@@ -4,15 +4,7 @@ import com.seriousmap.config.Config
 import java.awt.Color
 
 enum class TileType {
-    UNDISCOVERED,
-    ROOM,
-    ENTRANCE,
-    YELLOW,
-    TRAP,
-    FAIRY,
-    PUZZLE,
-    BLOOD,
-    WITHER;
+    UNDISCOVERED, ROOM, ENTRANCE, YELLOW, TRAP, FAIRY, PUZZLE, BLOOD, WITHER, OPENED;
 
     companion object {
         fun fromByte(byte: Byte?): TileType? = when (byte) {
@@ -38,6 +30,7 @@ enum class TileType {
             PUZZLE -> Config.colorPuzzle
             BLOOD -> Config.colorBlood
             WITHER -> Config.colorWither
+            OPENED -> Config.colorOpened
         }
     }
 }
