@@ -25,14 +25,15 @@ data class DungeonPlayer(val name: String) {
         get() = if (dungeonClass == null) "§a$name" else "§e[${dungeonClass!!.shortName}] §a$name"
 
     fun draw(angle: Float, shouldDrawName: Boolean) {
-        if (isDead) return
+        if (isDead && name != mc.thePlayer.name) return
         val position = positionRender ?: (positionMap ?: return)
         GlStateManager.translate(position.x, position.y, 20.0)
         if (shouldDrawName) {
             GlStateManager.pushMatrix()
+            GlStateManager.translate(0.0, 0.0, 10.0)
             GlStateManager.rotate(-angle, 0.0F, 0.0F, 1.0F)
             GlStateManager.scale(0.6, 0.6, 1.0)
-            RenderUtils.renderCenteredTextWithBackground(renderString, 0, 10)
+            RenderUtils.renderCenteredTextWithBackground(renderString, 0, 11)
             GlStateManager.popMatrix()
         }
         GlStateManager.rotate(position.yaw + 180, 0.0F, 0.0F, 1.0F)

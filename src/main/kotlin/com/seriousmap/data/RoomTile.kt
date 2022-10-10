@@ -1,5 +1,3 @@
-import SeriousMap.Companion.mc
-import com.seriousmap.config.Config
 import com.seriousmap.data.Tile
 import com.seriousmap.data.TileMarker
 import com.seriousmap.data.TileState

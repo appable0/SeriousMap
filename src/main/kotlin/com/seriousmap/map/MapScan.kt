@@ -2,6 +2,7 @@ package com.seriousmap.map
 
 import SeriousMap.Companion.mc
 import com.seriousmap.utils.LocationUtils
+import com.seriousmap.utils.RenderUtils
 import com.seriousmap.utils.Vec2i
 import com.seriousmap.utils.minus
 import gg.essential.universal.UChat

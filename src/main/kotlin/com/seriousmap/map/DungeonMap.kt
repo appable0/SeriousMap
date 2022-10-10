@@ -1,6 +1,7 @@
 package com.seriousmap.map
 
 import RoomTile
+import SeriousMap.Companion.config
 import SeriousMap.Companion.mc
 import com.seriousmap.config.Config
 import com.seriousmap.data.Tile
@@ -55,26 +56,22 @@ class DungeonMap(private val mapScale: MapScale, var mapData: MapData) {
     fun renderMap() {
         val shouldRenderNames =
             listOf("SPIRIT_LEAP", "INFINITE_SPIRIT_LEAP", "HAUNT_ABILITY").contains(mc.thePlayer.heldItem?.skyblockID)
-        val angle = if (Config.mapSpin) (180 - mc.thePlayer.rotationYaw) else 0.0F
+        val angle = if (config.mapSpin) (180 - mc.thePlayer.rotationYaw) else 0.0F
         val scale = ScaledResolution(mc).scaleFactor
-        val borderSize = (150 * Config.borderScale).roundToInt()
+        val borderSize = (150 * config.borderScale).roundToInt()
         GlStateManager.pushMatrix()
-
-        GlStateManager.translate(Config.mapX.toDouble(), Config.mapY.toDouble(), 0.0)
-        RenderUtils.renderRect(
-            0.0, 0.0, borderSize.toDouble(), borderSize.toDouble(), Color(0.0F, 0.0F, 0.0F, 0.5F)
-        )
-
+        GlStateManager.translate(config.mapX.toDouble(), config.mapY.toDouble(), 0.0)
+        RenderUtils.drawTooltip(2, 2, borderSize - 4, borderSize - 4, config.bgColor, config.borderColor)
         GL11.glEnable(GL11.GL_SCISSOR_TEST)
         GL11.glScissor(
-            Config.mapX * scale,
-            (mc.displayHeight - Config.mapY * scale - borderSize * scale),
+            config.mapX * scale,
+            (mc.displayHeight - config.mapY * scale - borderSize * scale),
             (borderSize * scale),
             (borderSize * scale)
         )
         GlStateManager.translate(borderSize / 2.0, borderSize / 2.0, 0.0)
         GlStateManager.rotate(angle, 0F, 0F, 1F)
-        val scaling = borderSize.toDouble() / (20 * 6 - 4) * Config.mapScale
+        val scaling = borderSize.toDouble() / (20 * 6 - 4) * config.mapScale
         GlStateManager.scale(scaling, scaling, 1.0)
         GlStateManager.translate(-renderWidth / 2.0, -renderHeight / 2.0, 0.0)
         tiles.forEach {

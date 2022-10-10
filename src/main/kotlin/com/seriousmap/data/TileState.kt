@@ -1,7 +1,7 @@
 package com.seriousmap.data
 
+import SeriousMap.Companion.config
 import SeriousMap.Companion.mc
-import com.seriousmap.config.Config
 import com.seriousmap.utils.RenderUtils
 import net.minecraft.client.renderer.GlStateManager
 import java.awt.Color
@@ -22,7 +22,7 @@ class TileState() {
 
         if (name == null) {
             marker?.resourceLocation?.let { resourceLocation ->
-                val textureSize = (16 * Config.checkScale / 2).toInt()
+                val textureSize = (16 * config.checkScale / 2).toInt()
                 GlStateManager.enableAlpha()
                 GlStateManager.color(255f, 255f, 255f, 255f)
                 mc.textureManager.bindTexture(resourceLocation)

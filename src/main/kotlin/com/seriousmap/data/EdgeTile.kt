@@ -1,4 +1,4 @@
-import com.seriousmap.config.Config
+import SeriousMap.Companion.config
 import com.seriousmap.data.Tile
 import com.seriousmap.data.TileType
 import com.seriousmap.map.DungeonMap
@@ -37,20 +37,20 @@ class EdgeTile(position: Vec2i, private val orientation: Orientation) : Tile(pos
 
             val width = when {
                 orientation == Orientation.VERTICAL -> 4
-                edgeType == EdgeType.DOOR -> Config.doorWidth
+                edgeType == EdgeType.DOOR -> config.doorWidth
                 edgeType == EdgeType.SEPARATOR -> 16
                 else -> null
             }!!.toDouble()
 
             val height = when {
                 orientation == Orientation.HORIZONTAL -> 4
-                edgeType == EdgeType.DOOR -> Config.doorWidth
+                edgeType == EdgeType.DOOR -> config.doorWidth
                 edgeType == EdgeType.SEPARATOR -> 16
                 else -> null
             }!!.toDouble()
 
             val color = if (edgeType == EdgeType.DOOR) {
-                TileType.toColor(it).scale(Config.doorDarken)
+                TileType.toColor(it).scale(config.doorDarken)
             } else TileType.toColor(it)
 
             RenderUtils.renderRect(-width / 2, -height / 2, width, height, color)

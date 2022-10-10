@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.GlStateManager
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.WorldRenderer
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats
+import net.minecraftforge.fml.client.config.GuiUtils
 import org.lwjgl.opengl.GL11.GL_QUADS
 import java.awt.Color
 
@@ -48,13 +49,9 @@ object RenderUtils {
 
     fun renderCenteredTextWithBackground(str: String?, x: Int, y: Int) {
         val width = mc.fontRendererObj.getStringWidth(str)
-        renderRect(x - width / 2.0 - 2, y - 1.0, width + 4.0, 10.0, Color(0, 0, 0, 150))
+        renderRect(x - width / 2.0 - 2, y - 1.0, width + 4.0, 11.0, Color(0, 0, 0, 150))
         mc.fontRendererObj.drawString(
-            str,
-            x - width / 2.0F,
-            y.toFloat(),
-            Color.WHITE.hashCode(),
-            true
+            str, x - width / 2.0F, y.toFloat(), Color.WHITE.hashCode(), true
         )
     }
 
@@ -75,5 +72,36 @@ object RenderUtils {
         }
     }
 
-
+    fun drawTooltip(x: Int, y: Int, w: Int, h: Int, background: Color, outline: Color) {
+        val backgroundColor = background.rgb
+        GuiUtils.drawGradientRect(
+            0, x - 3, y - 4, x + w + 3, y - 3, backgroundColor, backgroundColor
+        )
+        GuiUtils.drawGradientRect(
+            0, x - 3, y + h + 3, x + w + 3, y + h + 4, backgroundColor, backgroundColor
+        )
+        GuiUtils.drawGradientRect(
+            0, x - 3, y - 3, x + w + 3, y + h + 3, backgroundColor, backgroundColor
+        )
+        GuiUtils.drawGradientRect(
+            0, x - 4, y - 3, x - 3, y + h + 3, backgroundColor, backgroundColor
+        )
+        GuiUtils.drawGradientRect(
+            0, x + w + 3, y - 3, x + w + 4, y + h + 3, backgroundColor, backgroundColor
+        )
+        val borderColorStart = outline.rgb
+        val borderColorEnd = borderColorStart and 0xFEFEFE shr 1 or borderColorStart and -0x1000000
+        GuiUtils.drawGradientRect(
+            0, x - 3, y - 2, x - 2, y + h + 2, borderColorStart, borderColorEnd
+        )
+        GuiUtils.drawGradientRect(
+            0, x + w + 2, y - 2, x + w + 3, y + h + 2, borderColorStart, borderColorEnd
+        )
+        GuiUtils.drawGradientRect(
+            0, x - 3, y - 3, x + w + 3, y - 2, borderColorStart, borderColorStart
+        )
+        GuiUtils.drawGradientRect(
+            0, x - 3, y + h + 2, x + h + 3, y + h + 3, borderColorEnd, borderColorEnd
+        )
+    }
 }

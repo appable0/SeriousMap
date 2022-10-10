@@ -1,15 +1,9 @@
 package com.seriousmap.data
-
 import CornerTile
 import EdgeTile
 import RoomTile
-import SeriousMap.Companion.mc
-import com.seriousmap.config.Config
 import com.seriousmap.map.DungeonMap
-import com.seriousmap.utils.RenderUtils
 import com.seriousmap.utils.Vec2i
-import net.minecraft.client.renderer.GlStateManager
-import net.minecraft.world.gen.structure.StructureStrongholdPieces.Stronghold.Door
 
 abstract class Tile(val position: Vec2i) {
     var tileType: TileType? = null

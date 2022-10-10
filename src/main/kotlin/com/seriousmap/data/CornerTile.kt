@@ -1,4 +1,3 @@
-import com.seriousmap.config.Config
 import com.seriousmap.data.Tile
 import com.seriousmap.data.TileType
 import com.seriousmap.map.DungeonMap
