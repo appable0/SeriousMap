@@ -1,10 +1,10 @@
 # SeriousMap
 
-A work-in-progress legal map for dungeons in Hypixel Skyblock with puzzle detection: approximately a Forge port of the excellent LegalMap ChatTriggers module by UnclaimedBloom6.
+A work-in-progress legal map for dungeons in Hypixel Skyblock with puzzle detection, inspired by the excellent LegalMap ChatTriggers module by UnclaimedBloom6.
 
-Requires Forge 1.8.9 with Essential. Spins by default!
+Requires Forge 1.8.9 with Essential. Spins by default! (can be toggled off if you hate spinning for some reason :c)
 
-<img width="250" alt="Screen Shot 2022-10-08 at 2 00 12 PM" src="https://user-images.githubusercontent.com/16139460/194727649-abc1d4b4-c653-46e2-babb-42599ca85883.png">
+![2022-10-10_14 41 17 copy](https://user-images.githubusercontent.com/16139460/194957409-a89eb0fa-ec35-48a7-a504-a104a83aff59.png)
 
 ### Current features
 * Map rendering, including opened wither doors
