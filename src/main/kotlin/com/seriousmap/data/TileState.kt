@@ -11,7 +11,8 @@ class TileState() {
     var name: String? = null
         set(value) {
             field = when (value) {
-                "Higher or Lower" -> "Blaze"
+                "Higher Or Lower" -> "Blaze"
+                "Ice Path" -> "Silverfish"
                 else -> value
             }
         }
@@ -20,7 +21,14 @@ class TileState() {
         GlStateManager.rotate(-angle, 0F, 0F, 1F)
         GlStateManager.translate(0F, 0F, 1F)
 
-        if (name == null) {
+        val shouldRenderCheck = when {
+            name == null -> true
+            config.puzzleNames == 0 -> true
+            config.puzzleNames == 1 -> false
+            else -> marker != null
+        }
+
+        if (shouldRenderCheck) {
             marker?.resourceLocation?.let { resourceLocation ->
                 val textureSize = (16 * config.checkScale / 2).toInt()
                 GlStateManager.enableAlpha()
@@ -29,7 +37,7 @@ class TileState() {
                 RenderUtils.drawTexturedModalRect(-textureSize, -textureSize, textureSize * 2, textureSize * 2)
             }
         } else {
-            GlStateManager.scale(0.6, 0.6, 1.0)
+            GlStateManager.scale(config.checkScale * 0.75, config.checkScale * 0.75, 1.0)
             RenderUtils.renderCenteredMultiLineText(name, marker?.color ?: Color.WHITE)
         }
     }

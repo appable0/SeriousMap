@@ -2,17 +2,31 @@ package com.seriousmap.gui
 
 import SeriousMap.Companion.config
 import SeriousMap.Companion.mc
+import com.seriousmap.utils.RenderUtils
 import gg.essential.universal.UChat
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.client.gui.ScaledResolution
+import net.minecraft.client.renderer.GlStateManager
 import org.lwjgl.input.Mouse
 import kotlin.math.roundToInt
 
 class MoveGui : GuiScreen() {
 
-    var isDragging = false
-    var clickOffsetX = 0
-    var clickOffsetY = 0
+    private var isDragging = false
+    private var clickOffsetX = 0
+    private var clickOffsetY = 0
+
+    override fun drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float) {
+        GlStateManager.pushMatrix()
+        val scaledResolution = ScaledResolution(mc)
+        GlStateManager.translate(scaledResolution.scaledWidth / 2.0, scaledResolution.scaledHeight / 2.0, 300.0)
+        RenderUtils.renderTextCustomAlign("Drag to move map.", 0.0, 10, RenderUtils.Align.Center)
+        RenderUtils.renderTextCustomAlign("Scroll to scale the entire border.", 0.0, 20, RenderUtils.Align.Center)
+        RenderUtils.renderTextCustomAlign("Shift + scroll to scale the map inside the border.", 0.0, 30, RenderUtils.Align.Center)
+        RenderUtils.renderTextCustomAlign("Control + scroll to scale checks and puzzle names.", 0.0, 40, RenderUtils.Align.Center)
+        RenderUtils.renderTextCustomAlign("Option + scroll to scale player heads.", 0.0, 50, RenderUtils.Align.Center)
+        GlStateManager.popMatrix()
+    }
 
     override fun mouseClicked(mouseX: Int, mouseY: Int, mouseButton: Int) {
         isDragging = isHoveringOverMap(mouseX, mouseY)
@@ -46,7 +60,14 @@ class MoveGui : GuiScreen() {
         val mouseY = scaledResolution.scaledHeight - Mouse.getY() / scaledResolution.scaleFactor
         if (isHoveringOverMap(mouseX, mouseY)) {
             val scrollAmount = Mouse.getEventDWheel()
-            if (scrollAmount != 0) {
+            if (scrollAmount == 0) return
+            if (isShiftKeyDown()) {
+                config.mapScale = (config.mapScale + scrollAmount / 7200.0).coerceIn(0.5, 1.0).toFloat()
+            } else if (isCtrlKeyDown()) {
+                config.checkScale = (config.checkScale + scrollAmount / 7200.0).coerceIn(0.1, 1.0).toFloat()
+            } else if (isAltKeyDown()) {
+                config.playerScale = (config.playerScale + scrollAmount / 7200.0).coerceIn(0.5, 2.0).toFloat()
+            } else {
                 val oldScale = config.borderScale
                 val newScale = (config.borderScale + scrollAmount / 7200.0).coerceIn(0.2, 3.0)
                 val newX = (mouseX + (newScale / oldScale) * (config.mapX - mouseX)).roundToInt()
@@ -78,6 +99,6 @@ class MoveGui : GuiScreen() {
         }
 
         private fun isHoveringOverMap(x: Int, y: Int) =
-            (x in config.mapX..((config.mapX + 150 * config.borderScale).roundToInt()) && (y in config.mapY..(config.mapY + 150 * config.borderScale).roundToInt()))
+            (x in config.mapX..((config.mapX + 150 * config.borderScale).roundToInt()) && (y in config.mapY..(config.mapY + 150 * config.borderScale + (if (config.showInfo) 15 else 0)).roundToInt()))
     }
 }

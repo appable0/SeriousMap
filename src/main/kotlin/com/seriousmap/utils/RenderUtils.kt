@@ -72,6 +72,26 @@ object RenderUtils {
         }
     }
 
+    fun renderTextCustomAlign(str: String?, x: Double, y: Int, align: Align) {
+        if (str == null) return
+        val renderX = x + when (align) {
+            Align.Left -> 0
+            Align.Center -> -mc.fontRendererObj.getStringWidth(str) / 2
+            Align.Right -> -mc.fontRendererObj.getStringWidth(str)
+        }
+        mc.fontRendererObj.drawString(
+            str,
+            renderX.toFloat(),
+            y.toFloat(),
+            Color.WHITE.hashCode(),
+            true
+        )
+    }
+
+    enum class Align {
+        Left, Right, Center
+    }
+
     fun drawTooltip(x: Int, y: Int, w: Int, h: Int, background: Color, outline: Color) {
         val backgroundColor = background.rgb
         GuiUtils.drawGradientRect(
@@ -101,7 +121,7 @@ object RenderUtils {
             0, x - 3, y - 3, x + w + 3, y - 2, borderColorStart, borderColorStart
         )
         GuiUtils.drawGradientRect(
-            0, x - 3, y + h + 2, x + h + 3, y + h + 3, borderColorEnd, borderColorEnd
+            0, x - 3, y + h + 2, x + w + 3, y + h + 3, borderColorEnd, borderColorEnd
         )
     }
 }

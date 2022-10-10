@@ -2,6 +2,7 @@ import com.seriousmap.commands.SeriousMapCommand
 import com.seriousmap.config.Config
 import com.seriousmap.config.PersistentData
 import com.seriousmap.map.MapScan
+import com.seriousmap.map.ChatListener
 import com.seriousmap.map.TabScan
 import com.seriousmap.utils.LocationUtils
 import net.minecraft.client.Minecraft
@@ -42,7 +43,8 @@ class SeriousMap {
             this,
             LocationUtils,
             MapScan,
-            TabScan
+            TabScan,
+            ChatListener
         ).forEach(MinecraftForge.EVENT_BUS::register)
     }
 

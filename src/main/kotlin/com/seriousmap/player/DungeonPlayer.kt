@@ -1,5 +1,6 @@
 package com.seriousmap.player
 
+import SeriousMap.Companion.config
 import SeriousMap.Companion.mc
 import com.seriousmap.map.TabScan
 import com.seriousmap.utils.RenderUtils
@@ -28,6 +29,7 @@ data class DungeonPlayer(val name: String) {
         if (isDead && name != mc.thePlayer.name) return
         val position = positionRender ?: (positionMap ?: return)
         GlStateManager.translate(position.x, position.y, 20.0)
+        GlStateManager.scale(config.playerScale.toDouble(), config.playerScale.toDouble(), 1.0)
         if (shouldDrawName) {
             GlStateManager.pushMatrix()
             GlStateManager.translate(0.0, 0.0, 10.0)
